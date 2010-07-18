@@ -66,7 +66,7 @@ init([]) ->
     },
 
     RserveSup = {rserve_Sup, 
-      {rserve_sup, start_link, [ 6322 ]},
+      {rserve_sup, start_link, []},
       Restart, Shutdown, supervisor, [rserve_sup]
     },
 

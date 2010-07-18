@@ -5,6 +5,8 @@ PROG_DIR=$(cd `dirname $0`; pwd)
 test -h $0 && PROG=$(readlink $0)
 export ROOTDIR=$(dirname $PROG_DIR)
 
+HOSTNAME=`hostname`
+
 #### Fill in values for these variables ####
 REL_NAME=rserve_websocket
 REL_VSN=0.1.0.0
@@ -12,4 +14,26 @@ ERTS_VSN=5.8
 INVOCATION_SUFFIX="-prefix $ROOTDIR"
 ###########################################
 
-$ROOTDIR/bin/erlware_release_start_helper $REL_NAME $REL_VSN $ERTS_VSN sys.config $INVOCATION_SUFFIX
+case $1 in
+
+  start)
+    $ROOTDIR/bin/erlware_release_start_helper \
+    $REL_NAME $REL_VSN $ERTS_VSN sys.config \
+    $INVOCATION_SUFFIX -sname rserve_websocket \
+    -detached
+    echo "Starting Rserve WebSocket server."
+    ;;
+
+  stop)
+    $ROOTDIR/bin/erl -noshell -pa $ROOTDIR/lib/$REL_NAME-$REL_VSN  \
+    -sname rserve_websocket_terminator \
+    -s rserve_websocket stop rserve_websocket@$HOSTNAME
+    echo "Stopping Rserve WebSocket server."
+    ;;
+
+  devel)
+    $ROOTDIR/bin/erlware_release_start_helper \
+    $REL_NAME $REL_VSN $ERTS_VSN sys.config \
+    $INVOCATION_SUFFIX
+
+esac
