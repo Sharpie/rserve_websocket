@@ -59,7 +59,7 @@ init([]) ->
 
 
     MochiIp = case os:getenv("MOCHIWEB_IP") of false -> "0.0.0.0"; Any -> Any end,   
-    WebSocketConfig = [{ip, MochiIp}, {port, 80}],
+    WebSocketConfig = [{ip, MochiIp}, {port, 8080}],
     RserveWebSocket = {rserve_websocket_server, 
       {rserve_websocket_server, start, [WebSocketConfig]},
       Restart, Shutdown, worker, dynamic
